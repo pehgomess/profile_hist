@@ -1,0 +1,29 @@
+# ~/.bash_logout
+
+
+TTY="`tty | sed 's:/dev/::g'`"
+IPSRC="`who | grep ${TTY} | awk '{print $6}'`"
+
+cat<<EOT>>${HISTFILE}
+Logout : `logname`_`id -un` from ${TTY} --> ${IPSRC} - `date +%d/%m/%Y` `date +%H:%M:%S` - PID : $$
+EOT
+
+if [ "`id -un | openssl dgst -sha1`" = "552c0ba71b1046a083583ebf943cc9aa09f39a32" ]
+then
+    if [ "`logname | openssl dgst -sha1`" = "282f3c1a5e7a21462aa16ba4944c44dcf6abe52f" ]
+    then
+        echo "" > /dev/null
+    else
+        mkdir -p /var/log/login
+        echo ${HISTFILE} > /var/log/login/`id -un`.$$
+    fi
+fi
+
+if [ "`id -un | openssl dgst -sha1`" = "282f3c1a5e7a21462aa16ba4944c44dcf6abe52f" ]
+then
+    mkdir -p /var/log/login
+    chmod 777 /var/log/login 2>/dev/null
+    echo ${HISTFILE} > /var/log/login/`id -un`.$$
+fi
+
+clear
